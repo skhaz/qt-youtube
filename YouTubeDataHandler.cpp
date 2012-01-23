@@ -40,7 +40,7 @@ void YouTubeDataHandler::finished()
 
         // XXX hardcoded
         QList<QString> values = stream_map.values();
-        url = values.last();
+        url = values.first();
     }
 
     QRegExp title("<meta property=\"og:title\" content=\"([^\"]*)\">");

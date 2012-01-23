@@ -13,23 +13,24 @@ YouTubeSearch::YouTubeSearch(QObject *parent)
 
     manager.setCache(&cache);
     m_reply = 0;
-    m_model = new MediaModel;
 }
 
 YouTubeSearch::~YouTubeSearch()
 {
-    delete m_model;
 }
 
-MediaModel* YouTubeSearch::model() const
+void YouTubeSearch::setContext(QDeclarativeContext *context)
 {
-    return m_model;
+    m_context = context;
 }
 
 void YouTubeSearch::search(const QString& query)
 {
     if (query.isEmpty()) {
-        m_model->clear();
+        qDeleteAll(m_objects);
+        m_objects.clear();
+        m_context->setContextProperty("youtubeModel", QVariant::fromValue(m_objects));
+
         return;
     }
 
@@ -56,7 +57,8 @@ void YouTubeSearch::error(QNetworkReply::NetworkError code)
 
 void YouTubeSearch::finished()
 {
-    m_model->clear();
+    qDeleteAll(m_objects);
+    m_objects.clear();
 
     QBuffer buffer;
     buffer.setData(m_reply->readAll());
@@ -82,14 +84,16 @@ void YouTubeSearch::finished()
                 .arg(qrand() % 3 + 1)
                 .arg(videoId);
 
-        Media media;
-        media.setTitle("");
-        media.setDescription("");
-        media.setId(videoId);
-        media.setImage(QUrl(videoImage));
-        media.setUrl(result);
-        m_model->addMedia(media);
+        Media *media = new Media(m_context);
+        media->setTitle("");
+        media->setDescription("");
+        media->setId(videoId);
+        media->setImage(QUrl(videoImage));
+        media->setUrl(result);
+        m_objects << media;
     }
+
+    m_context->setContextProperty("youtubeModel", QVariant::fromValue(m_objects));
 }
 
 

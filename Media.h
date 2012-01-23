@@ -5,15 +5,14 @@
 #include <QString>
 #include <QUrl>
 #include <QMetaType>
+#include <QObject>
 
 
-class Media;
-Q_DECLARE_METATYPE(Media)
 
-class Media
+class Media : public QObject
 {
     public:
-        Media();
+        explicit Media(QObject *parent = 0);
 
         void setId(const QString& id);
 
@@ -35,15 +34,29 @@ class Media
 
         QUrl url() const;
 
+    signals:
+        void idChanged();
+
+        void titleChanged();
+
+        void descriptionChanged();
+
+        void imageChanged();
+
+        void urlChanged();
+
     private:
+        Q_OBJECT
+        Q_PROPERTY(QString id READ id WRITE setId NOTIFY idChanged)
+        Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
+        Q_PROPERTY(QString description READ description WRITE setDescription NOTIFY descriptionChanged)
+        Q_PROPERTY(QUrl image READ image WRITE setImage NOTIFY imageChanged)
+        Q_PROPERTY(QUrl url READ url WRITE setUrl NOTIFY urlChanged)
+
         QString m_id;
-
         QString m_title;
-
         QString m_description;
-
         QUrl m_image;
-
         QUrl m_url;
 };
 

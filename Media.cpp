@@ -3,13 +3,16 @@
 
 
 
-Media::Media()
+Media::Media(QObject *parent)
+: QObject(parent)
 {
 }
 
 void Media::setId(const QString& id)
 {
     m_id = id;
+
+    emit idChanged();
 }
 
 QString Media::id() const
@@ -20,6 +23,8 @@ QString Media::id() const
 void Media::setTitle(const QString& title)
 {
     m_title = title;
+
+    emit titleChanged();
 }
 
 QString Media::title() const
@@ -30,6 +35,8 @@ QString Media::title() const
 void Media::setDescription(const QString& description)
 {
     m_description = description;
+
+    emit descriptionChanged();
 }
 
 QString Media::description() const
@@ -40,6 +47,8 @@ QString Media::description() const
 void Media::setImage(const QUrl& image)
 {
     m_image = image;
+
+    emit imageChanged();
 }
 
 QUrl Media::image() const
@@ -50,6 +59,8 @@ QUrl Media::image() const
 void Media::setUrl(const QUrl& url)
 {
     m_url = url;
+
+    emit urlChanged();
 }
 
 QUrl Media::url() const

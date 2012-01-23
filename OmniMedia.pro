@@ -1,5 +1,5 @@
 
-QT += core gui declarative opengl network xmlpatterns
+QT += core gui declarative opengl network xmlpatterns sql
 
 # hardcoded
 INCLUDEPATH += .
@@ -15,22 +15,25 @@ SOURCES += Main.cpp \
     Instance.cpp \
     DownloadManager.cpp \
     Download.cpp \
-    MediaModel.cpp \
     Media.cpp \
-    YouTubeSearch.cpp
+    YouTubeSearch.cpp \
+    AbstractDataHandler.cpp \
+    YouTubeDataHandler.cpp
 
 HEADERS  += \
     Player.h \
     Instance.h \
     DownloadManager.h \
     Download.h \
-    MediaModel.h \
     Media.h \
-    YouTubeSearch.h
+    YouTubeSearch.h \
+    AbstractDataHandler.h \
+    YouTubeDataHandler.h
 
 OTHER_FILES += \
     VideoControl.qml \
     SearchInput.qml \
     Delegate.qml \
-    Main.qml
+    Main.qml \
+    ScrollBar.qml
 

@@ -1,4 +1,5 @@
 import QtQuick 1.1
+import OmniMedia 1.0
 
 Item {
     id: delegate
@@ -11,7 +12,7 @@ Item {
         height: parent.height - 10; y: 5
         width: 140
         smooth: true
-        source: image
+        source: image// image
 
         anchors {
             left: parent.left
@@ -28,7 +29,7 @@ Item {
         font { family: "Helvetica"; pixelSize: 16; bold: true }
 
         anchors {
-            top: thumb.top
+               top: thumb.top
             left: thumb.right
             leftMargin: 5
         }
@@ -53,17 +54,15 @@ Item {
     MouseArea {
         anchors.fill: delegate
         onClicked: {
+
             delegate.ListView.view.currentIndex = index
-            window.currentUrl = url
-            window.currentThumb = image
+            window.currentMedia = model.modelData
         }
     }
 
     Keys.onReleased: {
-        window.currentThumb = thumb
-
         if (event.key == Qt.Key_Return) {
-            window.currentUrl = url
+            window.currentMedia = model.modelData
         }
     }
 

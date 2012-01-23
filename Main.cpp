@@ -14,16 +14,21 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     qsrand(QTime(0, 0, 0).secsTo(QTime::currentTime()));
     qmlRegisterType<Player>("OmniMedia", 1, 0, "Player");
+    qmlRegisterType<Media>("OmniMedia", 1, 0, "Media");
 
     QDeclarativeView view;
+
     YouTubeSearch *youtube = new YouTubeSearch(&view);
-    QDeclarativeContext *context = view.rootContext();
-    context->setContextProperty("youtubeModel", youtube->model());
+    youtube->setContext(view.rootContext());
 
     QObject::connect(view.engine(), SIGNAL(quit()), qApp, SLOT(quit()));
     view.setResizeMode(QDeclarativeView::SizeRootObjectToView);
     view.setViewport(new QGLWidget(QGLFormat(QGL::SampleBuffers)));
     view.setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+    view.setAttribute(Qt::WA_OpaquePaintEvent);
+    view.setAttribute(Qt::WA_NoSystemBackground);
+    view.viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
+    view.viewport()->setAttribute(Qt::WA_NoSystemBackground);
     view.setWindowTitle("OmniMedia");
     view.setSource(QUrl::fromLocalFile("Main.qml"));
 

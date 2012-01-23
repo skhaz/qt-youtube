@@ -48,20 +48,25 @@ Player::~Player()
 }
 
 
-void Player::setSource(const QUrl& source)
+void Player::setSource(Media *source)
 {
+    if (!source)
+        return;
+
+    m_source = source;
+
     emit sourceChanged();
 
-    if (m_handler_map.contains(source.host())) {
-        AbstractDataHandler *handler = m_handler_map[source.host()];
-        handler->asyncStart(source);
+    if (m_handler_map.contains(source->url().host())) {
+        AbstractDataHandler *handler = m_handler_map[source->url().host()];
+        handler->asyncStart(source->url());
         return;
     }
 
-    setUrl(source);
+    setUrl(source->url());
 }
 
-QUrl Player::source() const
+Media *Player::source() const
 {
     return m_source;
 }
@@ -106,10 +111,8 @@ void Player::setUrl(const QUrl& url)
 {
     libvlc_media_t *media = libvlc_media_new_path(Instance(), url.toString().toLocal8Bit().constData());
     libvlc_media_player_set_media(m_player, media);
-    libvlc_video_set_aspect_ratio(m_player, "16:9");
     libvlc_video_set_format(m_player, "RV32", m_bounds.width(), m_bounds.height(), m_bounds.width() * 4);
     libvlc_media_release(media);
-    m_source = url;
 
     play();
 }

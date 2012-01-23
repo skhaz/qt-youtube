@@ -5,12 +5,12 @@
 #include <QtNetwork>
 #include <QDesktopServices>
 #include <QtXmlPatterns>
+#include <QDeclarativeContext>
 
 #include "Media.h"
-#include "MediaModel.h"
 
 #define CACHE_SIZE 128 * 1024 * 1024
-#define YOUTUBE_API "https://gdata.youtube.com/feeds/api/videos?max-results=15&"
+#define YOUTUBE_API "https://gdata.youtube.com/feeds/api/videos?max-results=30&"
 #define YTIMG "http://i%1.ytimg.com/vi/%2/hqdefault.jpg"
 
 
@@ -22,13 +22,14 @@ class YouTubeSearch : public QObject
 
         ~YouTubeSearch();
 
-        MediaModel* model() const;
+        void setContext(QDeclarativeContext *context);
 
     public slots:
         void search(const QString& query);
 
     protected slots:
         void error(QNetworkReply::NetworkError code);
+
         void finished();
 
     private:
@@ -38,7 +39,8 @@ class YouTubeSearch : public QObject
         QNetworkAccessManager manager;
         QNetworkDiskCache cache;
         QNetworkReply *m_reply;
-        MediaModel *m_model;
+        QDeclarativeContext *m_context;
+        QList<QObject *> m_objects;
 };
 
 #endif

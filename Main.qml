@@ -5,19 +5,19 @@ import OmniMedia 1.0
 
 Rectangle {
     id: window
-    width: 800; height: 600; color: "black"
-    property url currentThumb
-    property url currentUrl
+    width: 1024; height: 768; color: "black"
+
+    property Media currentMedia
 
     function ensureHudVisible() {
         panel.state = "HUDON"
-        timer.restart()
+        // timer.restart()
     }
 
     Timer {
         id: timer
         interval: 3000; running: true; repeat: true
-        onTriggered: panel.state = "HUDOFF"
+        // onTriggered: panel.state = "HUDOFF"
     }
 
     MouseArea {
@@ -27,20 +27,20 @@ Rectangle {
     }
 
     Player {
-        source: window.currentUrl
+        source: window.currentMedia
         id: videoPlayer
 
-        VideoControl {
-            x: (parent.width / 2) - (width / 2)
-            y: (parent.height - 20) - height
-            visible: false
-        }
+        // VideoControl {
+        //    x: (parent.width / 2) - (width / 2)
+        //    y: (parent.height - 20) - height
+        //    visible: false
+        //}
     }
 
     Rectangle {
         id: panel
         focus: true
-        width: 300; height: window.height
+        width: 300; height: window.height; y: search.height + search.y
         color: "black"; opacity: .8
 
         Component {
@@ -85,6 +85,8 @@ Rectangle {
             }
         }
 
+        ScrollBar { scrollArea: list; height: list.height; width: 8; anchors.right: list.right }
+
         states : [
             State {
                 name: "HUDON"
@@ -122,5 +124,10 @@ Rectangle {
                 }
             }
         ]
+    }
+
+    SearchInput {
+        id: "search"
+        width: panel.width
     }
 }

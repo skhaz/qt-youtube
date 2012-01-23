@@ -3,27 +3,38 @@ import QtQuick 1.1
 
 
 Item {
-    id: search
-
-    property alias url: urlText.text
-
-    width: parent.height; height: parent.height
+    id: "searchInput"; objectName: "searchInput"
+    width: parent.width; height: 30
+    signal queryChanged(string query)
 
     BorderImage {
-        id: bg; rotation: 180
-        x: 8; width: parent.width - 16; height: 30;
-        anchors.verticalCenter: parent.verticalCenter
-        border { left: 10; top: 10; right: 10; bottom: 10 }
+        source: "assets/imgs/lineedit.sci"
+        anchors.fill: parent
     }
 
     TextInput {
-        id: urlText
+        id: input
         horizontalAlignment: TextEdit.AlignLeft
-        font.pixelSize: 14;
+        font.pixelSize: 16; font.bold: true; color: "black"
 
         anchors {
             left: parent.left; right: parent.right; leftMargin: 18; rightMargin: 18
             verticalCenter: parent.verticalCenter
+        }
+
+        onTextChanged: timer.start()
+        onAccepted: {
+            searchInput.queryChanged(text)
+            timer.stop();
+        }
+    }
+
+    Timer {
+        id: timer
+        interval: 1000; running: false; repeat: true
+        onTriggered: {
+            searchInput.queryChanged(input.text)
+            timer.stop();
         }
     }
 }

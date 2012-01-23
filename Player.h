@@ -11,7 +11,7 @@
 #include <QMap>
 
 #include "Instance.h"
-
+#include "Media.h"
 #include "AbstractDataHandler.h"
 
 
@@ -26,9 +26,9 @@ class Player : public QGraphicsObject
 
         ~Player();
 
-        void setSource(const QUrl& source);
+        void setSource(Media *source);
 
-        QUrl source() const;
+        Media* source() const;
 
     public slots:
         void play();
@@ -55,9 +55,9 @@ class Player : public QGraphicsObject
     private:
         Q_OBJECT
 
-        Q_PROPERTY(QUrl source READ source WRITE setSource NOTIFY sourceChanged)
+        Q_PROPERTY(Media* source READ source WRITE setSource NOTIFY sourceChanged)
 
-        QUrl m_source;
+        Media *m_source;
 
         libvlc_media_player_t *m_player;
 
