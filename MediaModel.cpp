@@ -24,6 +24,13 @@ void MediaModel::removeMedia(const Media &)
 {
 }
 
+void MediaModel::clear()
+{
+    beginRemoveRows(QModelIndex(), 0, rowCount());
+    m_medias.clear();
+    endRemoveRows();
+}
+
 int MediaModel::rowCount(const QModelIndex &) const
 {
     return m_medias.count();

@@ -1,12 +1,20 @@
 #include "Player.h"
 
+#include "YouTubeDataHandler.h"
+
 #include <vlc/vlc.h>
 
 
 
 Player::Player(QObject *)
-: m_bounds(QPointF(), QSizeF(800, 600))
+: m_bounds(QPointF(), QSizeF(1024, 768))
 {
+    // XXX very ungly
+    YouTubeDataHandler *handler = new YouTubeDataHandler(this);
+    m_handler_map["www.youtube.com"] = handler;
+    connect(handler, SIGNAL(completed(QUrl)), SLOT(setUrl(QUrl)));
+
+
     // TODO resize
     connect(this, SIGNAL(frameReady(vlc_callback *)),
         SLOT(processFrame(vlc_callback *)));
@@ -24,9 +32,8 @@ Player::Player(QObject *)
 
 Player::~Player()
 {
-    stop();
-
     if (m_player) {
+        libvlc_media_player_stop(m_player);
         libvlc_media_player_release(m_player);
     }
 
@@ -40,19 +47,21 @@ Player::~Player()
     }
 }
 
-void Player::setSource(const QString& source)
-{
-    libvlc_media_t *media = libvlc_media_new_path(Instance(), source.toLocal8Bit().constData());
-    libvlc_media_player_set_media(m_player, media);
-    libvlc_video_set_format(m_player, "RV32", m_bounds.width(), m_bounds.height(), m_bounds.width() * 4);
-    libvlc_media_release(media);
-    m_source = source;
 
+void Player::setSource(const QUrl& source)
+{
     emit sourceChanged();
-    play();
+
+    if (m_handler_map.contains(source.host())) {
+        AbstractDataHandler *handler = m_handler_map[source.host()];
+        handler->asyncStart(source);
+        return;
+    }
+
+    setUrl(source);
 }
 
-QString Player::source() const
+QUrl Player::source() const
 {
     return m_source;
 }
@@ -91,6 +100,18 @@ void Player::stop()
 {
     libvlc_media_player_stop(m_player);
     m_image = QImage();
+}
+
+void Player::setUrl(const QUrl& url)
+{
+    libvlc_media_t *media = libvlc_media_new_path(Instance(), url.toString().toLocal8Bit().constData());
+    libvlc_media_player_set_media(m_player, media);
+    libvlc_video_set_aspect_ratio(m_player, "16:9");
+    libvlc_video_set_format(m_player, "RV32", m_bounds.width(), m_bounds.height(), m_bounds.width() * 4);
+    libvlc_media_release(media);
+    m_source = url;
+
+    play();
 }
 
 void *Player::lock(void *data, void **pixels)

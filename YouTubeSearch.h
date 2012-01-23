@@ -10,7 +10,7 @@
 #include "MediaModel.h"
 
 #define CACHE_SIZE 128 * 1024 * 1024
-#define YOUTUBE_API "https://gdata.youtube.com/feeds/api/videos?"
+#define YOUTUBE_API "https://gdata.youtube.com/feeds/api/videos?max-results=15&"
 #define YTIMG "http://i%1.ytimg.com/vi/%2/hqdefault.jpg"
 
 
@@ -28,10 +28,8 @@ class YouTubeSearch : public QObject
         void search(const QString& query);
 
     protected slots:
-        void downloadProgress(qint64 bytesReceived, qint64 bytesTotal);
         void error(QNetworkReply::NetworkError code);
-        void searchfinished();
-        void pageFinished();
+        void finished();
 
     private:
         Q_OBJECT
@@ -39,7 +37,7 @@ class YouTubeSearch : public QObject
 
         QNetworkAccessManager manager;
         QNetworkDiskCache cache;
-        QNetworkReply *m_search_reply;
+        QNetworkReply *m_reply;
         MediaModel *m_model;
 };
 

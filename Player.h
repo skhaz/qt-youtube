@@ -7,9 +7,12 @@
 #include <QImage>
 #include <QPainter>
 #include <QTimer>
-#include <QKeyEvent>
+#include <QUrl>
+#include <QMap>
 
 #include "Instance.h"
+
+#include "AbstractDataHandler.h"
 
 
 
@@ -23,9 +26,9 @@ class Player : public QGraphicsObject
 
         ~Player();
 
-        void setSource(const QString& source);
+        void setSource(const QUrl& source);
 
-        QString source() const;
+        QUrl source() const;
 
     public slots:
         void play();
@@ -33,6 +36,8 @@ class Player : public QGraphicsObject
         void pause();
 
         void stop();
+
+        void setUrl(const QUrl& url);
 
     signals:
         void frameReady(vlc_callback *);
@@ -50,9 +55,9 @@ class Player : public QGraphicsObject
     private:
         Q_OBJECT
 
-        Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
+        Q_PROPERTY(QUrl source READ source WRITE setSource NOTIFY sourceChanged)
 
-        QString m_source;
+        QUrl m_source;
 
         libvlc_media_player_t *m_player;
 
@@ -61,6 +66,8 @@ class Player : public QGraphicsObject
         QRectF m_bounds;
 
         QImage m_image;
+
+        QMap<QString, AbstractDataHandler *> m_handler_map;
 
         static void *lock(void*, void**);
 

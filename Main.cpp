@@ -4,17 +4,7 @@
 #include <QGLWidget>
 
 #include "Player.h"
-
-#include "DownloadManager.h"
-
-#include <QtDebug>
-#include <QFile>
-#include <QtXmlPatterns>
-#include <QStringList>
-
 #include "Media.h"
-#include "MediaModel.h"
-
 #include "YouTubeSearch.h"
 
 
@@ -22,26 +12,27 @@
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-
-    qsrand(QTime(0,0,0).secsTo(QTime::currentTime()));
-
+    qsrand(QTime(0, 0, 0).secsTo(QTime::currentTime()));
     qmlRegisterType<Player>("OmniMedia", 1, 0, "Player");
 
     QDeclarativeView view;
-    QObject::connect(view.engine(), SIGNAL(quit()), qApp, SLOT(quit()));
-
     YouTubeSearch *youtube = new YouTubeSearch(&view);
-    youtube->search("starcraft");
-
     QDeclarativeContext *context = view.rootContext();
     context->setContextProperty("youtubeModel", youtube->model());
 
+    QObject::connect(view.engine(), SIGNAL(quit()), qApp, SLOT(quit()));
     view.setResizeMode(QDeclarativeView::SizeRootObjectToView);
     view.setViewport(new QGLWidget(QGLFormat(QGL::SampleBuffers)));
     view.setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
-    view.setSource(QUrl::fromLocalFile("Main.qml"));
     view.setWindowTitle("OmniMedia");
-    view.show();
+    view.setSource(QUrl::fromLocalFile("Main.qml"));
 
+    QObject *root = qobject_cast<QObject *>(view.rootObject());
+    QObject *searchInput = root->findChild<QObject *>("searchInput");
+
+    if (searchInput)
+        QObject::connect(searchInput, SIGNAL(queryChanged(QString)), youtube, SLOT(search(QString)));
+
+    view.show();
     return app.exec();
 }
