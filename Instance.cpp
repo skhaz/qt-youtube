@@ -16,7 +16,7 @@ MonoInstance::MonoInstance()
         "--no-video-title-show",
         "--no-stats",
         "--no-snapshot-preview",
-        "--verbose=1",
+        "--quiet",
     };
 
     setenv("VLC_PLUGIN_PATH", "/Users/Skhaz/Workspace/vlc/modules", 1); // XXX

@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
     view.viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
     view.viewport()->setAttribute(Qt::WA_NoSystemBackground);
     view.setWindowTitle("OmniMedia");
-    view.setSource(QUrl::fromLocalFile("Main.qml"));
+    view.setSource(QUrl::fromLocalFile("./Main.qml"));
 
     QObject *root = qobject_cast<QObject *>(view.rootObject());
     QObject *searchInput = root->findChild<QObject *>("searchInput");
