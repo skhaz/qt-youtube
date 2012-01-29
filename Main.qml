@@ -40,7 +40,7 @@ Rectangle {
     Rectangle {
         id: panel
         focus: true
-        width: 300; height: window.height; y: search.height + search.y
+        width: 400; height: window.height; y: searchInput.height + searchInput.y
         color: "black"; opacity: .8
 
         Component {
@@ -127,7 +127,7 @@ Rectangle {
     }
 
     SearchInput {
-        id: "search"
+        id: searchInput
         width: panel.width
     }
 }

@@ -3,8 +3,7 @@
 
 #include "AbstractDataHandler.h"
 
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
+#include <QtNetwork>
 
 
 

@@ -3,7 +3,7 @@ import QtQuick 1.1
 
 
 Item {
-    id: "searchInput"; objectName: "searchInput"
+    id: searchItem; objectName: "searchInput"
     width: parent.width; height: 30
     signal queryChanged(string query)
 
@@ -24,7 +24,7 @@ Item {
 
         onTextChanged: timer.start()
         onAccepted: {
-            searchInput.queryChanged(text)
+            searchItem.queryChanged(text)
             timer.stop();
         }
     }
@@ -33,7 +33,7 @@ Item {
         id: timer
         interval: 1000; running: false; repeat: true
         onTriggered: {
-            searchInput.queryChanged(input.text)
+            searchItem.queryChanged(input.text)
             timer.stop();
         }
     }

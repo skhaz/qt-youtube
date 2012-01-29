@@ -4,13 +4,13 @@
 #include <QObject>
 #include <QtNetwork>
 #include <QDesktopServices>
-#include <QtXmlPatterns>
 #include <QDeclarativeContext>
+#include <QtXml>
 
 #include "Media.h"
 
 #define CACHE_SIZE 128 * 1024 * 1024
-#define YOUTUBE_API "https://gdata.youtube.com/feeds/api/videos?max-results=30&"
+#define YOUTUBE_API "https://gdata.youtube.com/feeds/api/videos?max-results=40&alt=rss&"
 #define YTIMG "http://i%1.ytimg.com/vi/%2/hqdefault.jpg"
 
 
@@ -28,13 +28,20 @@ class YouTubeSearch : public QObject
         void search(const QString& query);
 
     protected slots:
-        void error(QNetworkReply::NetworkError code);
+        void readyRead();
+
+        void error(QNetworkReply::NetworkError error);
 
         void finished();
 
     private:
         Q_OBJECT
         Q_DISABLE_COPY(YouTubeSearch)
+
+        QString currentTag;
+        QString linkString;
+        QString titleString;
+        QXmlStreamReader xml;
 
         QNetworkAccessManager manager;
         QNetworkDiskCache cache;

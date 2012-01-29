@@ -12,7 +12,7 @@ Item {
         height: parent.height - 10; y: 5
         width: 140
         smooth: true
-        source: image// image
+        source: image
 
         anchors {
             left: parent.left
@@ -54,14 +54,13 @@ Item {
     MouseArea {
         anchors.fill: delegate
         onClicked: {
-
             delegate.ListView.view.currentIndex = index
             window.currentMedia = model.modelData
         }
     }
 
     Keys.onReleased: {
-        if (event.key == Qt.Key_Return) {
+        if (event.key === Qt.Key_Return) {
             window.currentMedia = model.modelData
         }
     }
