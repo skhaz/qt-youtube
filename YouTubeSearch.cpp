@@ -106,7 +106,6 @@ void YouTubeSearch::error(QNetworkReply::NetworkError error)
 void YouTubeSearch::finished()
 {
     m_context->setContextProperty("youtubeModel", QVariant::fromValue(m_objects));
-    m_objects.clear();
     xml.clear();
 }
 
