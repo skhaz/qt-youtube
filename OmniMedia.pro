@@ -1,4 +1,3 @@
-
 QT += core gui declarative opengl network xml sql
 
 # TODO hardcoded
@@ -7,18 +6,6 @@ QT += core gui declarative opengl network xml sql
 INCLUDEPATH += .
 INCLUDEPATH += /Users/Skhaz/Workspace/vlc/vlc_install_dir/include
 LIBS += -L/Users/Skhaz/Workspace/vlc/vlc_install_dir/lib -lvlc
-
-# libtorrent
-INCLUDEPATH += -I/usr/local/include -I/usr/local/include/libtorrent
-LIBS += -L/usr/local/lib -ltorrent-rasterbar
-LIBS += -lboost_system-mt
-LIBS += -lboost_filesystem-mt
-DEFINES += TORRENT_USE_OPENSSL
-DEFINES += WITH_SHIPPED_GEOIP_H
-DEFINES += BOOST_ASIO_HASH_MAP_BUCKETS=1021
-DEFINES += BOOST_EXCEPTION_DISABLE
-DEFINES += BOOST_FILESYSTEM_VERSION=2
-DEFINES += TORRENT_LINKING_SHARED
 
 CONFIG -= app_bundle
 TARGET = OmniMedia
