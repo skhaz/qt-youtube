@@ -1,4 +1,3 @@
-
 #include <QtGui>
 #include <QtDeclarative>
 #include <QGLWidget>
@@ -9,34 +8,12 @@
 
 
 
-#include <iostream>
-#include <fstream>
-#include <iterator>
-#include <iomanip>
-
-#include <libtorrent/entry.hpp>
-#include <libtorrent/bencode.hpp>
-#include <libtorrent/torrent_info.hpp>
-#include <libtorrent/session.hpp>
-#include <libtorrent/lazy_entry.hpp>
-#include <boost/filesystem/operations.hpp>
-
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
     qsrand(QTime(0, 0, 0).secsTo(QTime::currentTime()));
     qmlRegisterType<Player>("OmniMedia", 1, 0, "Player");
     qmlRegisterType<Media>("OmniMedia", 1, 0, "Media");
-
-    using namespace libtorrent;
-    session s;
-    s.listen_on(std::make_pair(6881, 6889));
-    add_torrent_params p;
-    p.save_path = "./";
-    p.ti = new torrent_info("/Users/Skhaz/Downloads/The.Big.Bang.Theory.S04E23.The.Engagement.Reaction.HDTV.XviD-FQM.[eztv].torrent");
-    s.add_torrent(p);
-
-
 
     QDeclarativeView view;
 
