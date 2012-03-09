@@ -80,7 +80,7 @@ void DownloadManager::downloadProgress(qint64 bytesReceived, qint64 bytesTotal)
     Q_UNUSED(bytesTotal);
 }
 
-void	 DownloadManager::error(QNetworkReply::NetworkError code)
+void DownloadManager::error(QNetworkReply::NetworkError code)
 {
     Q_UNUSED(code);
     if (QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender())) {
