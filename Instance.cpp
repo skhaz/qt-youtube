@@ -19,7 +19,14 @@ MonoInstance::MonoInstance()
         "--quiet",
     };
 
-    setenv("VLC_PLUGIN_PATH", "/Users/Skhaz/Workspace/vlc/modules", 1); // XXX
+#ifdef _WIN32
+        /* setenv() is not implemented on MinGW */
+        if(!getenv("VLC_PLUGIN_PATH")) {
+            putenv("VLC_PLUGIN_PATH=\"C:\\Program Files (x86)\\VideoLAN\\VLC\\plugins\"");
+        }
+#else
+         setenv("VLC_PLUGIN_PATH", "/Users/Skhaz/Workspace/vlc/modules", 1);
+#endif
 
     m_vlc_instance = libvlc_new(sizeof(argv) / sizeof(* argv), argv);
 }
