@@ -1,11 +1,15 @@
+
 QT += core gui declarative opengl network xml sql
 
 # TODO hardcoded
 
 # vlc
 INCLUDEPATH += .
-INCLUDEPATH += /Users/Skhaz/Workspace/vlc/vlc_install_dir/include
-LIBS += -L/Users/Skhaz/Workspace/vlc/vlc_install_dir/lib -lvlc
+INCLUDEPATH += /Users/Skhaz/Workspace/vlc/build/vlc_install_dir/include
+LIBS += -L/Users/Skhaz/Workspace/vlc/build/vlc_install_dir/lib -lvlc
+
+# libMaia
+include(3rdparty/libmaia/maia.pri)
 
 CONFIG -= app_bundle
 TARGET = OmniMedia
@@ -24,7 +28,8 @@ SOURCES += Main.cpp \
     Media.cpp \
     YouTubeSearch.cpp \
     AbstractDataHandler.cpp \
-    YouTubeDataHandler.cpp
+    YouTubeDataHandler.cpp \
+    OpenSubtitlesClient.cpp
 
 HEADERS  += \
     Player.h \
@@ -34,7 +39,8 @@ HEADERS  += \
     Media.h \
     YouTubeSearch.h \
     AbstractDataHandler.h \
-    YouTubeDataHandler.h
+    YouTubeDataHandler.h \
+    OpenSubtitlesClient.h
 
 OTHER_FILES += \
     VideoControl.qml \
@@ -42,4 +48,3 @@ OTHER_FILES += \
     Delegate.qml \
     Main.qml \
     ScrollBar.qml
-
