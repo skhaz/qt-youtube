@@ -26,12 +26,12 @@ void YouTubeSearch::setContext(QDeclarativeContext *context)
 
 void YouTubeSearch::search(const QString& query)
 {
-    if (query.isEmpty()) {
-        qDeleteAll(m_objects);
-        m_objects.clear();
-        xml.clear();
-        m_context->setContextProperty("youtubeModel", QVariant::fromValue(m_objects));
+    xml.clear();
+    qDeleteAll(m_objects);
+    m_objects.clear();
 
+    if (query.isEmpty()) {
+        m_context->setContextProperty("youtubeModel", QVariant::fromValue(m_objects));
         return;
     }
 
@@ -56,15 +56,21 @@ void YouTubeSearch::readyRead()
 {
     int statusCode = m_reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
     if (statusCode >= 200 && statusCode < 300) {
+        QString currentTag;
+        QString linkString;
+        QString descriptionString;
+        QString titleString;
+
         xml.addData(m_reply->readAll());
         while (!xml.atEnd()) {
             xml.readNext();
             if (xml.isStartElement()) {
-                if (xml.name() == "item")
+                if (xml.name() == QLatin1String("item"))
                     linkString = xml.attributes().value("link").toString();
-                currentTag = xml.name().toString();
+
+                currentTag = xml.qualifiedName().toString();
             } else if (xml.isEndElement()) {
-                if (xml.name() == "item") {
+                if (xml.qualifiedName() == QLatin1String("media:title")) {
                     QUrl url(linkString);
                     QString videoId = url.queryItemValue("v");
                     QString videoImage = QString(YTIMG)
@@ -73,7 +79,7 @@ void YouTubeSearch::readyRead()
 
                     Media *media = new Media(m_context);
                     media->setTitle(titleString);
-                    media->setDescription("");
+                    media->setDescription(descriptionString);
                     media->setId(videoId);
                     media->setImage(QUrl(videoImage));
                     media->setUrl(url);
@@ -85,16 +91,18 @@ void YouTubeSearch::readyRead()
                 }
 
             } else if (xml.isCharacters() && !xml.isWhitespace()) {
-                if (currentTag == "title") {
+                if (currentTag == QLatin1String("media:title")) {
                     titleString += xml.text().toString();
-                } else if (currentTag == "link") {
+                } else if (currentTag == QLatin1String("media:description")) {
+                    descriptionString += xml.text().toString();
+                } else if (currentTag == QLatin1String("link")) {
                     linkString += xml.text().toString();
                 }
             }
         }
 
         if (xml.error() && xml.error() != QXmlStreamReader::PrematureEndOfDocumentError) {
-            qWarning() << "XML ERROR:" << xml.lineNumber() << ": " << xml.errorString();
+            qWarning() << xml.lineNumber() << xml.errorString();
         }
     }
 }

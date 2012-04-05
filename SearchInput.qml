@@ -31,7 +31,7 @@ Item {
 
     Timer {
         id: timer
-        interval: 1000; running: false; repeat: true
+        interval: 500; running: false; repeat: true
         onTriggered: {
             searchItem.queryChanged(input.text)
             timer.stop();

@@ -37,7 +37,8 @@ void YouTubeDataHandler::finished()
 
             // XXX hardcoded
             QList<QString> values = stream_map.values();
-            emit completed(values.first());
+            qDebug() << stream_map;
+            emit completed(values.last());
         }
     }
 }

@@ -26,15 +26,16 @@ Item {
         text: title
         color: delegate.ListView.isCurrentItem ? "white" : "gray"
         wrapMode: Text.WordWrap
-        font { family: "Helvetica"; pixelSize: 16; bold: true }
+        font { family: "Helvetica"; pixelSize: 16; bold: false }
 
         anchors {
-               top: thumb.top
+            top: thumb.top
             left: thumb.right
             leftMargin: 5
         }
     }
 
+    /*
     Text {
         id: desc
         text: description
@@ -50,6 +51,7 @@ Item {
             margins: 5, 5, 5, 5
         }
     }
+    */
 
     MouseArea {
         anchors.fill: delegate

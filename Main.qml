@@ -11,13 +11,13 @@ Rectangle {
 
     function ensureHudVisible() {
         panel.state = "HUDON"
-        // timer.restart()
+        timer.restart()
     }
 
     Timer {
         id: timer
         interval: 3000; running: true; repeat: true
-        // onTriggered: panel.state = "HUDOFF"
+        onTriggered: panel.state = "HUDOFF"
     }
 
     MouseArea {

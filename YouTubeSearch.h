@@ -10,7 +10,7 @@
 #include "Media.h"
 
 #define CACHE_SIZE 128 * 1024 * 1024
-#define YOUTUBE_API "https://gdata.youtube.com/feeds/api/videos?max-results=40&alt=rss&"
+#define YOUTUBE_API "https://gdata.youtube.com/feeds/api/videos?max-results=30&alt=rss&"
 #define YTIMG "http://i%1.ytimg.com/vi/%2/hqdefault.jpg"
 
 
@@ -38,9 +38,6 @@ class YouTubeSearch : public QObject
         Q_OBJECT
         Q_DISABLE_COPY(YouTubeSearch)
 
-        QString currentTag;
-        QString linkString;
-        QString titleString;
         QXmlStreamReader xml;
 
         QNetworkAccessManager manager;
