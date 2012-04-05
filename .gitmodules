@@ -1,0 +1,3 @@
+[submodule "3rdparty/libmaia"]
+	path = 3rdparty/libmaia
+	url = git://github.com/wiedi/libmaia.git
