@@ -11,6 +11,9 @@ LIBS += -L/Users/Skhaz/Workspace/vlc/build/vlc_install_dir/lib -lvlc
 # libMaia
 include(3rdparty/libmaia/maia.pri)
 
+# QJson
+include(3rdparty/qjson/qjson.pri)
+
 CONFIG -= app_bundle
 TARGET = OmniMedia
 TEMPLATE = app
@@ -29,7 +32,8 @@ SOURCES += Main.cpp \
     YouTubeSearch.cpp \
     AbstractDataHandler.cpp \
     YouTubeDataHandler.cpp \
-    OpenSubtitlesClient.cpp
+    OpenSubtitlesClient.cpp \
+    IMDBSearch.cpp
 
 HEADERS  += \
     Player.h \
@@ -40,7 +44,8 @@ HEADERS  += \
     YouTubeSearch.h \
     AbstractDataHandler.h \
     YouTubeDataHandler.h \
-    OpenSubtitlesClient.h
+    OpenSubtitlesClient.h \
+    IMDBSearch.h
 
 OTHER_FILES += \
     VideoControl.qml \

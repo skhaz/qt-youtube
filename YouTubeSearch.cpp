@@ -6,13 +6,14 @@
 
 
 YouTubeSearch::YouTubeSearch(QObject *parent)
-    : QObject(parent)
+: QObject(parent)
 {
     cache.setMaximumCacheSize(CACHE_SIZE);
     cache.setCacheDirectory(QDesktopServices::storageLocation(QDesktopServices::CacheLocation) + "/omnimedia");
 
     manager.setCache(&cache);
     m_reply = 0;
+    m_context = 0;
 }
 
 YouTubeSearch::~YouTubeSearch()
@@ -35,7 +36,7 @@ void YouTubeSearch::search(const QString& query)
         return;
     }
 
-    if (m_reply && m_reply->isRunning()) {
+    if (m_reply) {
         m_reply->abort();
         m_reply->deleteLater();
     }
@@ -86,8 +87,11 @@ void YouTubeSearch::readyRead()
                     m_objects << media;
 
                     m_context->setContextProperty("youtubeModel", QVariant::fromValue(m_objects));
+
+                    currentTag.clear();
                     titleString.clear();
                     linkString.clear();
+                    descriptionString.clear();
                 }
 
             } else if (xml.isCharacters() && !xml.isWhitespace()) {
@@ -116,5 +120,3 @@ void YouTubeSearch::finished()
     m_context->setContextProperty("youtubeModel", QVariant::fromValue(m_objects));
     xml.clear();
 }
-
-

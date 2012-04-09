@@ -45,4 +45,5 @@ void YouTubeDataHandler::finished()
 
 void YouTubeDataHandler::error(QNetworkReply::NetworkError error)
 {
+    qDebug() << error;
 }

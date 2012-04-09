@@ -39,7 +39,6 @@ class YouTubeSearch : public QObject
         Q_DISABLE_COPY(YouTubeSearch)
 
         QXmlStreamReader xml;
-
         QNetworkAccessManager manager;
         QNetworkDiskCache cache;
         QNetworkReply *m_reply;
