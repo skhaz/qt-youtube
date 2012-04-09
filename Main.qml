@@ -11,12 +11,12 @@ Rectangle {
 
     function ensureHudVisible() {
         panel.state = "HUDON"
-        timer.restart()
+        // timer.restart()
     }
 
     Timer {
         id: timer
-        interval: 3000; running: true; repeat: true
+        interval: 3000; running: false; repeat: true
         onTriggered: panel.state = "HUDOFF"
     }
 

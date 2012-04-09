@@ -14,7 +14,6 @@ Player::Player(QObject *)
     m_handler_map["www.youtube.com"] = handler;
     connect(handler, SIGNAL(completed(QUrl)), SLOT(setUrl(QUrl)));
 
-
     // TODO resize
     connect(this, SIGNAL(frameReady(vlc_callback *)),
         SLOT(processFrame(vlc_callback *)));
