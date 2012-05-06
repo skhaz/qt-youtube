@@ -103,6 +103,7 @@ uint64_t OpenSubtitlesClient::computeHash(const QString& filename)
     for(uint64_t tmp = 0, i = 0; i < 65536/sizeof(tmp) && fread((char*)&tmp, sizeof(tmp), 1, handle); hash += tmp, i++);
     fseek(handle, std::max((uint64_t)0, size - 65536), SEEK_SET);
     for(uint64_t tmp = 0, i = 0; i < 65536/sizeof(tmp) && fread((char*)&tmp, sizeof(tmp), 1, handle); hash += tmp, i++);
+	fclose(handle);
 
     return hash;
 }
