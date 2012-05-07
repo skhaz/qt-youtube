@@ -89,11 +89,12 @@ void OpenSubtitlesClient::handleSslErrors(QNetworkReply *reply, const QList<QSsl
 uint64_t OpenSubtitlesClient::computeHash(const QString& filename)
 {
     // http://trac.opensubtitles.org/projects/opensubtitles/wiki/HashSourceCodes
-    if (!QFile::exists(filename)) {
+    FILE* handle = fopen(filename.toLocal8Bit(), "rb");
+
+    if (!handle) {
         return -1;
     }
 
-    FILE* handle = fopen(filename.toLocal8Bit(), "rb");
     uint64_t hash, size;
 
     fseek(handle, 0, SEEK_END);

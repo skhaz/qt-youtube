@@ -5,7 +5,6 @@
 #include "Player.h"
 #include "Media.h"
 #include "YouTubeSearch.h"
-#include "IMDBSearch.h"
 
 
 
@@ -19,11 +18,8 @@ int main(int argc, char *argv[])
 
     QDeclarativeView view;
 
-    // YouTubeSearch *youtube = new YouTubeSearch(&view);
-    // youtube->setContext(view.rootContext());
-
-    IMDBSearch *imdb = new IMDBSearch(&view);
-    imdb->setContext(view.rootContext());
+    YouTubeSearch *youtube = new YouTubeSearch(&view);
+    youtube->setContext(view.rootContext());
 
     QObject::connect(view.engine(), SIGNAL(quit()), qApp, SLOT(quit()));
     view.setResizeMode(QDeclarativeView::SizeRootObjectToView);
@@ -34,14 +30,13 @@ int main(int argc, char *argv[])
     view.viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
     view.viewport()->setAttribute(Qt::WA_NoSystemBackground);
     view.setWindowTitle("OmniMedia");
-    view.setSource(QUrl::fromLocalFile("./Main.qml"));
+    view.setSource(QUrl::fromLocalFile("Main.qml"));
 
     QObject *root = qobject_cast<QObject *>(view.rootObject());
     QObject *searchInput = root->findChild<QObject *>("searchInput");
 
     if (searchInput)
-        QObject::connect(searchInput, SIGNAL(queryChanged(QString)), imdb, SLOT(search(QString)));
-        // QObject::connect(searchInput, SIGNAL(queryChanged(QString)), youtube, SLOT(search(QString)));
+        QObject::connect(searchInput, SIGNAL(queryChanged(QString)), youtube, SLOT(search(QString)));
 
     view.show();
 
