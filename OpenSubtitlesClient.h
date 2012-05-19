@@ -3,6 +3,7 @@
 #define OpenSubtitlesClient_h
 
 #include "maiaXmlRpcClient.h"
+#include <cstdint>
 
 
 

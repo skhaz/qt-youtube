@@ -1,5 +1,5 @@
 #ifndef _Download_h
-#define _Download
+#define _Download_h
 
 #include <QObject>
 #include <QNetworkReply>
