@@ -1,0 +1,46 @@
+# Define minimum cmake version
+CMAKE_MINIMUM_REQUIRED (VERSION 2.6)
+
+# Project name
+PROJECT (qtyoutube)
+
+# VLC require a custom module
+SET (CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/modules)
+FIND_PACKAGE (VLC REQUIRED)
+
+# Try to find the required modules
+FIND_PACKAGE (Qt4 REQUIRED)
+ADD_SUBDIRECTORY (${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qjson)
+AUX_SOURCE_DIRECTORY (${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/libmaia LIBMAIA_SOURCES)
+
+# Define the required Qt modules
+SET (QT_USE_QTOPENGL TRUE)
+SET (QT_USE_QTNETWORK TRUE)
+SET (QT_USE_QTDECLARATIVE TRUE)
+SET (QT_USE_QTXML TRUE)
+
+# Set the project sources
+AUX_SOURCE_DIRECTORY (. PROJECT_SOURCES)
+
+# Set the project headers
+FILE (GLOB PROJECT_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
+FILE (GLOB LIBMAIA_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/libmaia/*.h")
+
+# Wrap Qt metacompiler
+QT4_WRAP_CPP(PROJECT_HEADERS_MOC ${PROJECT_HEADERS} ${LIBMAIA_HEADERS})
+
+# Include the libraries paths
+INCLUDE_DIRECTORIES (${LIBVLC_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/libmaia)
+INCLUDE_DIRECTORIES (${CMAKE_CURRENT_BINARY_DIR})
+
+# Include the necessary headers
+INCLUDE (${QT_USE_FILE})
+
+# Set the application definitions
+ADD_DEFINITIONS (${QT_DEFINITIONS})
+
+# Define the binary output
+ADD_EXECUTABLE (qtyoutube ${PROJECT_SOURCES} ${PROJECT_HEADERS_MOC} ${LIBMAIA_SOURCES})
+
+# Add all the necessary libraries
+TARGET_LINK_LIBRARIES (qtyoutube ${QT_LIBRARIES} ${LIBVLC_LIBRARY} qjson)
