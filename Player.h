@@ -1,6 +1,5 @@
-
-#ifndef _Player_h
-#define _Player_h
+#ifndef PLAYER_H
+#define PLAYER_H
 
 #include <QGraphicsObject>
 #include <QMutex>
@@ -9,12 +8,9 @@
 #include <QTimer>
 #include <QUrl>
 #include <QMap>
-
-#include "Instance.h"
+#include "LibVlcInstance.h"
 #include "Media.h"
 #include "AbstractDataHandler.h"
-
-
 
 struct libvlc_media_player_t;
 struct vlc_callback;
@@ -22,13 +18,15 @@ struct vlc_callback;
 class Player : public QGraphicsObject
 {
     public:
-        explicit Player(QObject *parent = 0);
+        explicit Player(QObject* parent = 0);
 
         ~Player();
 
         void setSource(Media *source);
 
         Media* source() const;
+
+        LibVlcInstance& vlcInstance();
 
     public slots:
         void play();
@@ -57,6 +55,8 @@ class Player : public QGraphicsObject
 
         Q_PROPERTY(Media* source READ source WRITE setSource NOTIFY sourceChanged)
 
+        LibVlcInstance m_vlc_instance;
+
         Media *m_source;
 
         libvlc_media_player_t *m_player;
@@ -81,4 +81,4 @@ struct vlc_callback
     unsigned char *pixels;
 };
 
-#endif
+#endif // PLAYER_H
