@@ -3,8 +3,11 @@
 
 #include <QScopedPointer>
 #include <QApplication>
+#include <QFile>
 #include <string>
 #include <vector>
+#include "Logger.h"
+#include "LogFileSink.h"
 
 /// The Application class is responsible for further initialization of the app
 /// and provides acessors to the current instance and internal resources. It
@@ -28,6 +31,9 @@ public:
     /// Runs the Application and returns the exit code.
     int run();
 
+    /// Returns the application logger.
+    Logger& logger();
+
     /// Return the arguments that should be passed during the initialization
     /// of a libvlc object;
     const std::vector<std::string>& vlcArguments() const;
@@ -38,6 +44,15 @@ private:
 
     /// Vlc arguments
     std::vector<std::string> m_vlc_arguments;
+
+    /// Current log file.
+    QFile m_logFile;
+
+    /// Current log sink.
+    LogFileSink m_logSink;
+
+    /// Logger instance
+    Logger m_logger;
 
     /// Qt application
     QApplication m_application;
@@ -57,7 +72,11 @@ private:
         } \
         catch(const std::exception& ex) \
         { \
-            \
+            app->logger().log(LOG_CRITICAL, "Could not initialize the application."); \
+        } \
+        catch(...) \
+        { \
+            app->logger().log(LOG_FATAL, "A fatal error ocurred."); \
         } \
         return app->run(); \
     }

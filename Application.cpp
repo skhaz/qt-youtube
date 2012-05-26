@@ -13,9 +13,12 @@ Application* Application::m_instance = nullptr;
 
 Application::Application(int argc, char** argv)
     : m_application(argc, argv)
+    , m_logSink(m_logFile)
+    , m_logger(&m_logSink)
 {
     m_instance = this;
     m_arguments.assign(argv, argv + argc);
+    m_logger.setLevel(LOG_DEBUG);
 }
 
 Application* Application::instance()
@@ -56,7 +59,12 @@ void Application::main(const std::vector<std::string>& arguments)
 
 void Application::initialize()
 {
+    m_logFile.setFileName("log.txt");
+    m_logFile.open(QIODevice::WriteOnly | QIODevice::Append);
+    logger().log(LOG_DEBUG, "Initializing application.");
+
     // Copy the necessary arguments for vlc working properly
+    logger().log(LOG_DEBUG, "Parsing VLC arguments.");
     static const char* libVlcArguments[] =
     {
         "--intf=dummy",
@@ -75,6 +83,8 @@ int Application::run()
     int returnCode = EXIT_FAILURE;
     try
     {
+        logger().log(LOG_INFORMATION, "Starting application.");
+
         // Call the main function
         main(m_arguments);
 
@@ -82,14 +92,19 @@ int Application::run()
     }
     catch(const std::exception& ex)
     {
-        // logger()->log();
+        logger().log(LOG_ERROR, ex.what());
     }
     catch(...)
     {
-        // logger()->log();
+        logger().log(LOG_CRITICAL, "An unhandled exception has been thrown.");
     }
 
     return returnCode;
+}
+
+Logger& Application::logger()
+{
+    return m_logger;
 }
 
 const std::vector<std::string>& Application::vlcArguments() const
