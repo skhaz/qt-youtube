@@ -6,6 +6,7 @@
 Player::Player(QObject* parent)
     : m_bounds(QPointF(), QSizeF(1024, 768))
     , m_vlc_instance(Application::instance()->vlcArguments())
+    , m_mediaPlayer(m_vlc_instance)
 {
     // XXX very ungly
     YouTubeDataHandler *handler = new YouTubeDataHandler(this);
@@ -21,19 +22,14 @@ Player::Player(QObject* parent)
     m_callback->target = this;
     m_callback->pixels = new unsigned char[int(sizeof(*(m_callback->pixels)) * m_bounds.width() * m_bounds.height() * 4)];
 
-    m_player = libvlc_media_player_new(vlcInstance());
-    libvlc_video_set_callbacks(m_player, lock, unlock, NULL, m_callback);
+    m_mediaPlayer.setCallbacks(lock, unlock, NULL, m_callback);
+
     setCacheMode(NoCache);
     setFlag(QGraphicsItem::ItemIsFocusable, false);
 }
 
 Player::~Player()
 {
-    if (m_player) {
-        libvlc_media_player_stop(m_player);
-        libvlc_media_player_release(m_player);
-    }
-
     if (m_callback) {
         if (m_callback->pixels) {
             delete[] m_callback->pixels;
@@ -95,31 +91,31 @@ void Player::processFrame(vlc_callback* callback)
 
 void Player::play()
 {
-    libvlc_media_player_play(m_player);
+    m_mediaPlayer.play();
 }
 
 void Player::pause()
 {
-    libvlc_media_player_pause(m_player);
+    m_mediaPlayer.pause();
 }
 
 void Player::stop()
 {
-    libvlc_media_player_stop(m_player);
+    m_mediaPlayer.stop();
     m_image = QImage();
 }
 
 void Player::setUrl(const QUrl& url)
 {
     libvlc_media_t *media = libvlc_media_new_path(vlcInstance(), url.toString().toLocal8Bit().constData());
-    libvlc_media_player_set_media(m_player, media);
-    libvlc_video_set_format(m_player, "RV32", m_bounds.width(), m_bounds.height(), m_bounds.width() * 4);
+    m_mediaPlayer.setMedia(media);
+    m_mediaPlayer.setFormat("RV32", m_bounds.width(), m_bounds.height(), m_bounds.width() * 4);
     libvlc_media_release(media);
 
     play();
 }
 
-void *Player::lock(void *data, void **pixels)
+void* Player::lock(void *data, void **pixels)
 {
     vlc_callback *callback = static_cast<vlc_callback *>(data);
     callback->mutex->lock();

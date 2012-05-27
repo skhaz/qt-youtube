@@ -9,6 +9,7 @@
 #include <QUrl>
 #include <QMap>
 #include "LibVlcInstance.h"
+#include "VlcMediaPlayer.h"
 #include "Media.h"
 #include "AbstractDataHandler.h"
 
@@ -57,6 +58,8 @@ private:
 
     LibVlcInstance m_vlc_instance;
 
+    VlcMediaPlayer m_mediaPlayer;
+
     Media *m_source;
 
     libvlc_media_player_t *m_player;
@@ -69,7 +72,7 @@ private:
 
     QMap<QString, AbstractDataHandler *> m_handler_map;
 
-    static void *lock(void*, void**);
+    static void* lock(void*, void**);
 
     static void unlock(void*, void*, void * const*);
 };

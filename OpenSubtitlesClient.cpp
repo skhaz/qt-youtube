@@ -1,6 +1,7 @@
 #include "OpenSubtitlesClient.h"
 
-OpenSubtitlesClient::OpenSubtitlesClient(QObject* parent) : QObject(parent)
+OpenSubtitlesClient::OpenSubtitlesClient(QObject* parent)
+    : QObject(parent)
 {
     rpc = new MaiaXmlRpcClient(QUrl("http://api.opensubtitles.org/xml-rpc"), this);
 
