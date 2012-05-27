@@ -5,8 +5,8 @@
 #include <QStringList>
 #include <QMutex>
 #include <QWaitCondition>
+#include <QThread>
 #include <QQueue>
-#include <QScopedPointer>
 
 /// The level of the Logger or the log message.
 enum LoggerLevel
@@ -35,7 +35,7 @@ public:
 };
 
 /// The Logger class provides a simple logging engine.
-class Logger
+class Logger : public QThread
 {
 public:
     /// Creates the Logger.
@@ -61,6 +61,17 @@ public:
     void log(LoggerLevel level, const QString& message);
 
 private:
+    /// Worker thread. Process the messages and writes them to the sink.
+    void run();
+
+private:
+    /// Internal thread state
+    enum ThreadState
+    {
+        STATE_RUNNING,
+        STATE_TERMINATED
+    };
+
     /// Internal log entry.
     struct LogEntry
     {
@@ -70,10 +81,6 @@ private:
 
     /// Logger level.
     LoggerLevel m_level;
-
-    /// Internal thread of the logger. Actually it processes the messages and
-    /// writes them to the sink.
-    QScopedPointer<LoggerThread> m_thread;
 
     /// Queue mutex.
     QMutex m_mutex;
@@ -86,6 +93,9 @@ private:
 
     /// Log sink.
     LoggerSink* m_sink;
+
+    /// Thread state.
+    ThreadState m_threadState;
 
     friend class LoggerThread;
 };

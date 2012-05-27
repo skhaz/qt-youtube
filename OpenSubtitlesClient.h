@@ -1,39 +1,36 @@
-
-#ifndef OpenSubtitlesClient_h
-#define OpenSubtitlesClient_h
+#ifndef OPENSUBTITLESCLIENT_H
+#define OPENSUBTITLESCLIENT_H
 
 #include "maiaXmlRpcClient.h"
 #include <cstdint>
 
 
-
 class OpenSubtitlesClient : public QObject
 {
-    public:
-        OpenSubtitlesClient(QObject *parent = 0);
+    Q_OBJECT
 
-        bool logged() const;
+public:
+    OpenSubtitlesClient(QObject *parent = 0);
 
-    public slots:
-        void login();
-        void logout();
-        void search(const QString& filename);
+    bool logged() const;
 
-    private slots:
-        void handleLogin(QVariant &);
-        void handleResponse(QVariant &);
-        void handleError(int error, const QString &message);
-        void handleSslErrors(QNetworkReply *, const QList<QSslError> &);
+public slots:
+    void login();
+    void logout();
+    void search(const QString& filename);
 
-    protected:
-        uint64_t computeHash(const QString& filename);
+private slots:
+    void handleLogin(QVariant &);
+    void handleResponse(QVariant &);
+    void handleError(int error, const QString &message);
+    void handleSslErrors(QNetworkReply *, const QList<QSslError> &);
 
-    private:
-        Q_OBJECT
+protected:
+    uint64_t computeHash(const QString& filename);
 
-        MaiaXmlRpcClient *rpc;
-
-        QString token;
+private:
+    MaiaXmlRpcClient *rpc;
+    QString token;
 };
 
-#endif
+#endif // OPENSUBTITLESCLIENT_H

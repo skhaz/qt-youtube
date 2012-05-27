@@ -99,6 +99,9 @@ int Application::run()
         logger().log(LOG_CRITICAL, "An unhandled exception has been thrown.");
     }
 
+    logger().log(LOG_DEBUG,
+        QString("Application terminated with return code %1.").arg(returnCode));
+
     return returnCode;
 }
 

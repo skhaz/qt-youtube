@@ -17,61 +17,61 @@ struct vlc_callback;
 
 class Player : public QGraphicsObject
 {
-    public:
-        explicit Player(QObject* parent = 0);
+    Q_OBJECT
 
-        ~Player();
+public:
+    explicit Player(QObject* parent = 0);
 
-        void setSource(Media *source);
+    ~Player();
 
-        Media* source() const;
+    void setSource(Media *source);
 
-        LibVlcInstance& vlcInstance();
+    Media* source() const;
 
-    public slots:
-        void play();
+    LibVlcInstance& vlcInstance();
 
-        void pause();
+public slots:
+    void play();
 
-        void stop();
+    void pause();
 
-        void setUrl(const QUrl& url);
+    void stop();
 
-    signals:
-        void frameReady(vlc_callback *);
+    void setUrl(const QUrl& url);
 
-        void sourceChanged();
+signals:
+    void frameReady(vlc_callback *);
 
-    protected:
-        QRectF boundingRect() const;
+    void sourceChanged();
 
-        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+protected:
+    QRectF boundingRect() const;
 
-    protected slots:
-        void processFrame(vlc_callback *callback);
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
-    private:
-        Q_OBJECT
+protected slots:
+    void processFrame(vlc_callback *callback);
 
-        Q_PROPERTY(Media* source READ source WRITE setSource NOTIFY sourceChanged)
+private:
+    Q_PROPERTY(Media* source READ source WRITE setSource NOTIFY sourceChanged)
 
-        LibVlcInstance m_vlc_instance;
+    LibVlcInstance m_vlc_instance;
 
-        Media *m_source;
+    Media *m_source;
 
-        libvlc_media_player_t *m_player;
+    libvlc_media_player_t *m_player;
 
-        vlc_callback* m_callback;
+    vlc_callback* m_callback;
 
-        QRectF m_bounds;
+    QRectF m_bounds;
 
-        QImage m_image;
+    QImage m_image;
 
-        QMap<QString, AbstractDataHandler *> m_handler_map;
+    QMap<QString, AbstractDataHandler *> m_handler_map;
 
-        static void *lock(void*, void**);
+    static void *lock(void*, void**);
 
-        static void unlock(void*, void*, void * const*);
+    static void unlock(void*, void*, void * const*);
 };
 
 struct vlc_callback

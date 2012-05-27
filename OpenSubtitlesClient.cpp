@@ -1,7 +1,4 @@
-
 #include "OpenSubtitlesClient.h"
-
-
 
 OpenSubtitlesClient::OpenSubtitlesClient(QObject* parent) : QObject(parent)
 {

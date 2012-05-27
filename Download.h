@@ -1,5 +1,5 @@
-#ifndef _Download_h
-#define _Download_h
+#ifndef DOWNLOAD_H
+#define DOWNLOAD_H
 
 #include <QObject>
 #include <QNetworkReply>
@@ -10,19 +10,13 @@
 
 class Download : public QObject
 {
-    public:
-        explicit Download(QObject *parent = 0);
+    Q_OBJECT
+public:
+    explicit Download(QObject *parent = 0);
 
-    public slots:
-
-    private:
-        Q_OBJECT
-
-        QNetworkReply *reply;
-
-        QFile *file;
+private:
+    QNetworkReply *reply;
+    QFile *file;
 };
 
-// Q_DECLARE_METATYPE(Download)
-
-#endif
+#endif // DOWNLOAD_H

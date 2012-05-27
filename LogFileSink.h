@@ -12,9 +12,6 @@ public:
     /// Creates the LogFileSink.
     LogFileSink(QFile& file);
 
-    /// Destroys the LogFileSink.
-    virtual ~LogFileSink();
-
     /// Write the log level and the log message in a formatted way.
     /// The current format is: DD/MM/YYYY - hh:mm:ss [level] : message
     void write(LoggerLevel level, const QString &message);

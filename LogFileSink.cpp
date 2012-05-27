@@ -8,11 +8,6 @@ LogFileSink::LogFileSink(QFile& file)
 
 }
 
-LogFileSink::~LogFileSink()
-{
-
-}
-
 void LogFileSink::write(LoggerLevel level, const QString &message)
 {
     QTextStream out(&m_file);

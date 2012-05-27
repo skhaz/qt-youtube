@@ -1,31 +1,27 @@
-#ifndef YouTubeDataHandler_h
-#define YouTubeDataHandler_h
+#ifndef YOUTUBEDATAHANDLER_H
+#define YOUTUBEDATAHANDLER_H
 
 #include "AbstractDataHandler.h"
-
 #include <QtNetwork>
-
-
 
 class YouTubeDataHandler : public AbstractDataHandler
 {
-    public:
-        explicit YouTubeDataHandler(QObject *parent = 0);
+    Q_OBJECT
 
-        virtual void asyncStart(const QUrl& url);
+public:
+    explicit YouTubeDataHandler(QObject *parent = 0);
 
-    protected slots:
-        void finished();
+    virtual void asyncStart(const QUrl& url);
 
-        void error(QNetworkReply::NetworkError);
+protected slots:
+    void finished();
 
-    private:
-        Q_OBJECT
+    void error(QNetworkReply::NetworkError);
 
-        QUrl m_url;
-
-        QNetworkAccessManager manager;
-        QNetworkReply *reply;
+private:
+    QUrl m_url;
+    QNetworkAccessManager manager;
+    QNetworkReply *reply;
 };
 
-#endif
+#endif // YOUTUBEDATAHANDLER_H

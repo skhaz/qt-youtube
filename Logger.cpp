@@ -2,72 +2,24 @@
 #include <QMutexLocker>
 #include "Logger.h"
 
-class LoggerThread : public QThread
-{
-    enum ThreadState
-    {
-        STATE_RUNNING,
-        STATE_TERMINATED
-    };
-
-public:
-    LoggerThread(Logger& parent)
-        : QThread()
-    {
-        m_mutex = &parent.m_mutex;
-        m_condition = &parent.m_condition;
-        m_queue = &parent.m_queue;
-        m_sink = parent.m_sink;
-        m_state = STATE_RUNNING;
-    }
-
-    void run()
-    {
-        while(m_state != STATE_TERMINATED)
-        {
-            QMutexLocker locker(m_mutex);
-
-            if(m_queue->empty())
-            {
-                m_condition->wait(m_mutex);
-            }
-
-            if(m_state == STATE_TERMINATED || m_queue->empty())
-                continue;
-
-            Logger::LogEntry entry = m_queue->front();
-            m_queue->pop_front();
-
-            m_sink->write(entry.logLevel, entry.logMessage);
-        }
-    }
-
-    void interrupt()
-    {
-        m_state = STATE_TERMINATED;
-    }
-
-private:
-    QMutex* m_mutex;
-    QWaitCondition* m_condition;
-    QQueue<Logger::LogEntry>* m_queue;
-    ThreadState m_state;
-    LoggerSink* m_sink;
-};
-
 Logger::Logger(LoggerSink* sink /*= nullptr*/)
-    : m_level(LOG_FATAL)
 {
+    m_level = LOG_FATAL;
     m_sink = sink;
-    m_thread.reset(new LoggerThread(*this));
-    m_thread->start();
+    m_threadState = STATE_RUNNING;
+    start();
 }
 
 Logger::~Logger()
 {
-    m_thread->interrupt();
+    // Set the logger thread as terminated
+    m_threadState = STATE_TERMINATED;
+
+    // Notify the thread
     m_condition.wakeOne();
-    m_thread->wait();
+
+    // Wait for termination
+    wait();
 }
 
 void Logger::setLevel(LoggerLevel level)
@@ -106,5 +58,26 @@ void Logger::log(LoggerLevel level, const QString& message)
 
         if(notify)
             m_condition.wakeOne();
+    }
+}
+
+void Logger::run()
+{
+    while(m_threadState != STATE_TERMINATED)
+    {
+        QMutexLocker locker(&m_mutex);
+
+        if(m_queue.empty())
+        {
+            m_condition.wait(&m_mutex);
+        }
+
+        if(m_threadState == STATE_TERMINATED || m_queue.empty())
+            continue;
+
+        Logger::LogEntry entry = m_queue.front();
+        m_queue.pop_front();
+
+        m_sink->write(entry.logLevel, entry.logMessage);
     }
 }

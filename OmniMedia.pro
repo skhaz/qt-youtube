@@ -5,8 +5,8 @@ QT += core gui declarative opengl network xml sql
 
 # vlc
 INCLUDEPATH += .
-INCLUDEPATH += /Users/Skhaz/Workspace/vlc/build/vlc_install_dir/include
-LIBS += -L/Users/Skhaz/Workspace/vlc/build/vlc_install_dir/lib -lvlc
+INCLUDEPATH += C:\vlc-2.0.1\sdk\include
+LIBS += -LC:\vlc-2.0.1\sdk\lib -llibvlc
 
 # libMaia
 include(3rdparty/libmaia/maia.pri)
@@ -23,9 +23,10 @@ MOC_DIR = temp/moc
 RCC_DIR = temp/rcc
 UI_DIR = temp/ui
 
-SOURCES += Main.cpp \
+DEFINES += NOMINMAX
+
+SOURCES += \
     Player.cpp \
-    Instance.cpp \
     DownloadManager.cpp \
     Download.cpp \
     Media.cpp \
@@ -33,11 +34,14 @@ SOURCES += Main.cpp \
     AbstractDataHandler.cpp \
     YouTubeDataHandler.cpp \
     OpenSubtitlesClient.cpp \
-    IMDBSearch.cpp
+    Application.cpp \
+    LibVlcInstance.cpp \
+    Logger.cpp \
+    ProgramOptions.cpp \
+    LogFileSink.cpp
 
 HEADERS  += \
     Player.h \
-    Instance.h \
     DownloadManager.h \
     Download.h \
     Media.h \
@@ -45,7 +49,11 @@ HEADERS  += \
     AbstractDataHandler.h \
     YouTubeDataHandler.h \
     OpenSubtitlesClient.h \
-    IMDBSearch.h
+    Application.h \
+    LibVlcInstance.h \
+    Logger.h \
+    ProgramOptions.h \
+    LogFileSink.h
 
 OTHER_FILES += \
     VideoControl.qml \
