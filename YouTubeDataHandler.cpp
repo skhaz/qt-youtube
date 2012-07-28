@@ -20,30 +20,15 @@ void YouTubeDataHandler::asyncStart(const QUrl& url)
 
 void YouTubeDataHandler::finished()
 {
-    int statusCode = _reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
     if (statusCode >= 200 && statusCode < 300) {
-        QByteArray data = reply->readAll();
+        // This block is based on file youtube.lua from VideoLAN project
+        QHash<int, QString> stream_map;
         QRegExp re("\"url_encoded_fmt_stream_map\": \"([^\"]*)\"", Qt::CaseInsensitive, QRegExp::RegExp2);
         QRegExp urls("itag=(\\d+),url=(.*)");
-        QString storyboard("storyboard_spec=");
 
-        if (int index = data.indexOf(storyboard)) {
-            index = index + storyboard.length();
-            QString temp = QUrl::fromPercentEncoding(data.mid(index, (data.indexOf("\\u0026", index)) - index));
-
-            qDebug() << temp;
-            QStringList temp2 = temp.split("|");
-            QString temp3 = temp2.at(2);
-
-            qDebug() << temp3.split("#");
-            // $L
-            // $N
-        }
-
-        if (re.indexIn(data) != -1) {
-            QHash<int, QString> stream_map;
+        if (re.indexIn(reply->readAll()) != -1) {
             QString result = re.cap(1);
-
             foreach (QString line, result.split("\\u0026")) {
                 if (urls.indexIn(QUrl::fromPercentEncoding(line.toAscii())) != -1) {
                     stream_map[urls.cap(1).toInt()] = urls.cap(2);
@@ -52,15 +37,10 @@ void YouTubeDataHandler::finished()
 
             // XXX hardcoded
             QList<QString> values = stream_map.values();
-            emit completed(values.first());
+            qDebug() << stream_map;
+            emit completed(values.last());
         }
     }
-
-    else {
-        // TODO handle error
-    }
-
-    _reply->deleteLater();
 }
 
 void YouTubeDataHandler::error(QNetworkReply::NetworkError error)
