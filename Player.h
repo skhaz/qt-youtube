@@ -1,6 +1,5 @@
-
-#ifndef _Player_h
-#define _Player_h
+#ifndef PLAYER_H
+#define PLAYER_H
 
 #include <QGraphicsObject>
 #include <QMutex>
@@ -9,69 +8,73 @@
 #include <QTimer>
 #include <QUrl>
 #include <QMap>
-
-#include "Instance.h"
+#include "LibVlcInstance.h"
+#include "VlcMediaPlayer.h"
 #include "Media.h"
 #include "AbstractDataHandler.h"
-
-
 
 struct libvlc_media_player_t;
 struct vlc_callback;
 
 class Player : public QGraphicsObject
 {
-    public:
-        explicit Player(QObject *parent = 0);
+    Q_OBJECT
 
-        ~Player();
+public:
+    explicit Player(QObject* parent = 0);
 
-        void setSource(Media *source);
+    ~Player();
 
-        Media* source() const;
+    void setSource(Media *source);
 
-    public slots:
-        void play();
+    Media* source() const;
 
-        void pause();
+    LibVlcInstance& vlcInstance();
 
-        void stop();
+public slots:
+    void play();
 
-        void setUrl(const QUrl& url);
+    void pause();
 
-    signals:
-        void frameReady(vlc_callback *);
+    void stop();
 
-        void sourceChanged();
+    void setUrl(const QUrl& url);
 
-    protected:
-        QRectF boundingRect() const;
+signals:
+    void frameReady(vlc_callback *);
 
-        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+    void sourceChanged();
 
-    protected slots:
-        void processFrame(vlc_callback *callback);
+protected:
+    QRectF boundingRect() const;
 
-    private:
-        Q_OBJECT
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
-        Q_PROPERTY(Media* source READ source WRITE setSource NOTIFY sourceChanged)
+protected slots:
+    void processFrame(vlc_callback *callback);
 
-        Media *m_source;
+private:
+    Q_PROPERTY(Media* source READ source WRITE setSource NOTIFY sourceChanged)
 
-        libvlc_media_player_t *m_player;
+    LibVlcInstance m_vlc_instance;
 
-        vlc_callback* m_callback;
+    VlcMediaPlayer m_mediaPlayer;
 
-        QRectF m_bounds;
+    Media *m_source;
 
-        QImage m_image;
+    libvlc_media_player_t *m_player;
 
-        QMap<QString, AbstractDataHandler *> m_handler_map;
+    vlc_callback* m_callback;
 
-        static void *lock(void*, void**);
+    QRectF m_bounds;
 
-        static void unlock(void*, void*, void * const*);
+    QImage m_image;
+
+    QMap<QString, AbstractDataHandler *> m_handler_map;
+
+    static void* lock(void*, void**);
+
+    static void unlock(void*, void*, void * const*);
 };
 
 struct vlc_callback
@@ -81,4 +84,4 @@ struct vlc_callback
     unsigned char *pixels;
 };
 
-#endif
+#endif // PLAYER_H

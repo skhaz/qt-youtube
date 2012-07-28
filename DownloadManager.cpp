@@ -1,9 +1,7 @@
 #include "DownloadManager.h"
 
-
-
 DownloadManager::DownloadManager(QObject *parent)
-: QObject(parent)
+    : QObject(parent)
 {
     cache.setMaximumCacheSize(CACHE_SIZE);
     cache.setCacheDirectory(QDesktopServices::storageLocation(QDesktopServices::CacheLocation) + "/omnimedia");

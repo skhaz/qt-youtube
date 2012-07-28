@@ -1,12 +1,8 @@
-
+#include <QtDebug>
 #include "YouTubeSearch.h"
 
-#include <QtDebug>
-
-
-
 YouTubeSearch::YouTubeSearch(QObject *parent)
-: QObject(parent)
+    : QObject(parent)
 {
     cache.setMaximumCacheSize(CACHE_SIZE);
     cache.setCacheDirectory(QDesktopServices::storageLocation(QDesktopServices::CacheLocation) + "/omnimedia");
@@ -14,10 +10,6 @@ YouTubeSearch::YouTubeSearch(QObject *parent)
     manager.setCache(&cache);
     m_reply = 0;
     m_context = 0;
-}
-
-YouTubeSearch::~YouTubeSearch()
-{
 }
 
 void YouTubeSearch::setContext(QDeclarativeContext *context)
@@ -113,6 +105,7 @@ void YouTubeSearch::readyRead()
 
 void YouTubeSearch::error(QNetworkReply::NetworkError error)
 {
+
 }
 
 void YouTubeSearch::finished()

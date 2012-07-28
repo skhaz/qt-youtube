@@ -1,11 +1,9 @@
-
 #include "Media.h"
 
-
-
 Media::Media(QObject *parent)
-: QObject(parent)
+    : QObject(parent)
 {
+
 }
 
 void Media::setId(const QString& id)
@@ -15,7 +13,7 @@ void Media::setId(const QString& id)
     emit idChanged();
 }
 
-QString Media::id() const
+const QString& Media::id() const
 {
     return m_id;
 }
@@ -27,7 +25,7 @@ void Media::setTitle(const QString& title)
     emit titleChanged();
 }
 
-QString Media::title() const
+const QString& Media::title() const
 {
     return m_title;
 }
@@ -39,7 +37,7 @@ void Media::setDescription(const QString& description)
     emit descriptionChanged();
 }
 
-QString Media::description() const
+const QString& Media::description() const
 {
     return m_description;
 }
@@ -51,7 +49,7 @@ void Media::setImage(const QUrl& image)
     emit imageChanged();
 }
 
-QUrl Media::image() const
+const QUrl& Media::image() const
 {
     return m_image;
 }
@@ -63,7 +61,7 @@ void Media::setUrl(const QUrl& url)
     emit urlChanged();
 }
 
-QUrl Media::url() const
+const QUrl& Media::url() const
 {
     return m_url;
 }

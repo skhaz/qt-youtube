@@ -1,14 +1,12 @@
-#include "YouTubeDataHandler.h"
-
 #include <QRegExp>
 #include <QHash>
 #include <QStringList>
-
-
+#include "YouTubeDataHandler.h"
 
 YouTubeDataHandler::YouTubeDataHandler(QObject *parent)
-: AbstractDataHandler(parent)
+    : AbstractDataHandler(parent)
 {
+
 }
 
 void YouTubeDataHandler::asyncStart(const QUrl& url)

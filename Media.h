@@ -1,6 +1,5 @@
-
-#ifndef _Media_h
-#define _Media_h
+#ifndef MEDIA_H
+#define MEDIA_H
 
 #include <QString>
 #include <QUrl>
@@ -8,56 +7,56 @@
 #include <QObject>
 
 
-
 class Media : public QObject
 {
-    public:
-        explicit Media(QObject *parent = 0);
+    Q_OBJECT
 
-        void setId(const QString& id);
+public:
+    explicit Media(QObject *parent = 0);
 
-        QString id() const;
+    void setId(const QString& id);
 
-        void setTitle(const QString& title);
+    const QString& id() const;
 
-        QString title() const;
+    void setTitle(const QString& title);
 
-        void setDescription(const QString& description);
+    const QString& title() const;
 
-        QString description() const;
+    void setDescription(const QString& description);
 
-        void setImage(const QUrl& image);
+    const QString& description() const;
 
-        QUrl image() const;
+    void setImage(const QUrl& image);
 
-        void setUrl(const QUrl& url);
+    const QUrl& image() const;
 
-        QUrl url() const;
+    void setUrl(const QUrl& url);
 
-    signals:
-        void idChanged();
+    const QUrl& url() const;
 
-        void titleChanged();
+signals:
+    void idChanged();
 
-        void descriptionChanged();
+    void titleChanged();
 
-        void imageChanged();
+    void descriptionChanged();
 
-        void urlChanged();
+    void imageChanged();
 
-    private:
-        Q_OBJECT
-        Q_PROPERTY(QString id READ id WRITE setId NOTIFY idChanged)
-        Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
-        Q_PROPERTY(QString description READ description WRITE setDescription NOTIFY descriptionChanged)
-        Q_PROPERTY(QUrl image READ image WRITE setImage NOTIFY imageChanged)
-        Q_PROPERTY(QUrl url READ url WRITE setUrl NOTIFY urlChanged)
+    void urlChanged();
 
-        QString m_id;
-        QString m_title;
-        QString m_description;
-        QUrl m_image;
-        QUrl m_url;
+private:
+    Q_PROPERTY(QString id READ id WRITE setId NOTIFY idChanged)
+    Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
+    Q_PROPERTY(QString description READ description WRITE setDescription NOTIFY descriptionChanged)
+    Q_PROPERTY(QUrl image READ image WRITE setImage NOTIFY imageChanged)
+    Q_PROPERTY(QUrl url READ url WRITE setUrl NOTIFY urlChanged)
+
+    QString m_id;
+    QString m_title;
+    QString m_description;
+    QUrl m_image;
+    QUrl m_url;
 };
 
-#endif
+#endif // MEDIA_H
